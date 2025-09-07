@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGL Clone - Ask Me Anything</title>
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #ff758c, #ff7eb3); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .container { background: #fff; padding: 2rem; border-radius: 25px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0px 10px 25px rgba(0,0,0,0.2); }
+    .logo { font-size: 2rem; font-weight: bold; color: #ff4b7d; margin-bottom: 1.5rem; }
+    textarea { width: 100%; padding: 1rem; border-radius: 20px; border: 1px solid #ccc; resize: none; font-size: 1rem; margin-bottom: 1rem; outline: none; }
+    button { background: #ff4b7d; border: none; padding: 1rem 2rem; border-radius: 20px; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+    button:hover { background: #e63a6c; }
+    .footer { margin-top: 1.5rem; font-size: 0.9rem; color: #777; }
+    .message { margin-top: 1rem; color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">NGL</div>
+    <form id="messageForm">
+      <textarea id="message" name="message" rows="5" placeholder="Send me anonymous messages..."></textarea>
+      <input type="hidden" id="timestamp" name="timestamp" />
+      <br>
+      <button type="submit">Send!</button>
+    </form>
+    <p id="response" class="message"></p>
+    <div class="footer">Made with ❤️ by NGL (Clone)</div>
+  </div>
+
+  <script>
+    // 🔹 Paste your Google Apps Script Web App URL below
+    const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+    const form = document.getElementById("messageForm");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      let msg = document.getElementById("message").value;
+      if(msg.trim() === "") {
+        document.getElementById("response").innerText = "⚠️ Please type something!";
+        return;
+      }
+      // Add timestamp before sending
+      document.getElementById("timestamp").value = new Date().toISOString();
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          document.getElementById("response").innerText = "✅ Message sent!";
+          document.getElementById("message").value = "";
+        })
+        .catch(error => {
+          document.getElementById("response").innerText = "❌ Error sending message.";
+          console.error('Error!', error.message);
+        });
+    });
+  </script>
+</body>
+</html>
